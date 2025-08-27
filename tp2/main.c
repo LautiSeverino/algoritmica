@@ -136,14 +136,14 @@ void arrayEstadisticas(void) {
     int longitud = sizeof(numeros) / sizeof(numeros[0]);
     int numeroModa = 0;
     int maxFrecuencia = moda[0];
-    int suma;
+    int suma = 0;
     
     for (int i = 0; i < longitud; i++)
     {
         numeroRandom = rand() % 11;
         numeros[i] = numeroRandom;
         moda[numeroRandom]++;
-
+        suma +=numeroRandom;
     }
     
     for (int i = 0; i < 11; i++)
@@ -154,11 +154,7 @@ void arrayEstadisticas(void) {
         }
     }
 
-    for (int i = 0; i < longitud; i++)
-    {
-        suma += numeros[i];
-    }
-    int media = suma / 50;
+    double media = (double)suma / 50;
 
     double varianza = 0.0;
     for (int i = 0; i < longitud; i++)
@@ -176,7 +172,7 @@ void arrayEstadisticas(void) {
     }
 
     printf("\nModa: %d (aparecio %d veces)\n", numeroModa, maxFrecuencia);
-    printf("Media: %d", media);
+    printf("Media: %f\n", media);
     printf("Desviacion estandar: %f", desviacion);
 }
 
