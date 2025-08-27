@@ -2,20 +2,26 @@
 #include <stdlib.h>
 #include <time.h>
 
-void arrayRandon(void);
+void arrayRandom(void);
+void diezArrayRandom(void);
+void sumaVectores(void);
+void arrayEstadisticas(void);
+void arraySinDuplicados(void) ;
 
 
 int main() {
 
-    arrayRandon();
-
-
+    //arrayRandom();
+    //diezArrayRandom();
+    //sumaVectores();
+    //arrayEstadisticas();
+    arraySinDuplicados();
     return 0;
 }
 
 
 //ejercicio 1
-void arrayRandon(void) {
+void arrayRandom(void) {
     //semilla generacion numero random
     srand(time(NULL));
 
@@ -50,3 +56,152 @@ void arrayRandon(void) {
 }
 
 //ejercicio 2
+
+void diezArrayRandom(void) {
+    
+    //semilla generacion numero random
+    srand(time(NULL));
+    
+    // cada indice de representa ese numero
+    // cuando sale un numero va a esa posicion del array e incrementa en uno el valor que por defecto esta en cero
+    int frecuencias[11] = {0};  // inicializar en 0
+
+    int numeros[10];
+    int longitud = sizeof(numeros) / sizeof(numeros[0]);
+
+    
+    for (int t = 0; t < 10; t++)
+    {
+    
+        for (int i = 0; i < longitud; i++)
+        {
+            int numeroRandom;
+            int repetido;
+
+            do
+            {
+                numeroRandom = rand() % 11;
+                repetido = 0;
+
+                for (int j = 0; j < i; j++)
+                {
+                    if (numeros[j] == numeroRandom)
+                    {
+                        repetido = 1;
+                        break;
+                    }
+                }
+                
+            } while (repetido);
+
+            numeros[i] = numeroRandom;
+        }
+
+        for (int p = 0; p < 10; p++)
+        {
+            frecuencias[numeros[p]]++;
+        }
+    
+    }
+
+    for (int i = 0; i < 11; i++) {
+        printf("Numero %2d -> %d veces\n", i, frecuencias[i]);
+    }
+    
+    printf("\n");
+}
+
+//ejercicio 3
+void sumaVectores(void){
+    int vector1[] = {1, 2, 3, 4, 5};
+    int vector2[] = {6, 7, 8, 9, 10};
+    int suma[5];
+    int longitud = sizeof(suma) / sizeof(suma[0]);
+
+    for (int i = 0; i < longitud; i++)
+    {
+        suma[i] = vector1[i] + vector2[i];
+        printf("%d + %d = %d \n", vector1[i], vector2[i], suma[i]);
+    }
+}
+
+//ejercicio 4
+void arrayEstadisticas(void) {
+    
+    srand(time(NULL));
+    int numeros[50]; 
+    int numeroRandom;
+    int moda[11] = {0};
+    int longitud = sizeof(numeros) / sizeof(numeros[0]);
+    int numeroModa = 0;
+    int maxFrecuencia = moda[0];
+    
+    for (int i = 0; i < longitud; i++)
+    {
+        numeroRandom = rand() % 11;
+        numeros[i] = numeroRandom;
+        moda[numeroRandom]++;
+
+    }
+    
+    for (int i = 0; i < 11; i++)
+    {
+        if(moda[i] > maxFrecuencia) {
+            maxFrecuencia = moda[i];
+            numeroModa = i;
+        }
+    }
+    printf("Numeros generados:\n");
+    for (int i = 0; i < longitud; i++) {
+        printf("%d ", numeros[i]);
+    }
+
+    printf("\nModa: %d (aparecio %d veces)", numeroModa, maxFrecuencia);
+}
+
+
+//ejercicio 5
+void arraySinDuplicados(void) {
+    
+    srand(time(NULL));
+
+    int numeros[20];
+    int sinDuplicados[20];
+    int numeroRandom;
+    int nuevoTam = 0;
+    int longitud = sizeof(numeros) / sizeof(numeros[0]); 
+
+
+    for (int i = 0; i < longitud; i++)
+    {
+        numeroRandom = rand() % 10;
+        numeros[i] = numeroRandom;
+        printf("%d ", numeros[i]);
+    }
+
+    for (int i = 0; i < longitud; i++)
+    {
+        int yaExiste = 0;
+        for (int j = 0; j < nuevoTam; j++)
+        {
+            if (numeros[i] == sinDuplicados[j])
+            {
+                yaExiste = 1;
+                break;
+            }
+        }
+        if (!yaExiste)
+        {
+            sinDuplicados[nuevoTam] = numeros[i];
+            nuevoTam++;
+        }
+        
+    }
+    
+    printf("Array sin duplicados \n");
+    for (int i = 0; i < nuevoTam; i++)
+    {
+        printf("%d ", sinDuplicados[i]);
+    }
+
+} 
