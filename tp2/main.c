@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h> 
 
 void arrayRandom(void);
 void diezArrayRandom(void);
@@ -14,8 +15,8 @@ int main() {
     //arrayRandom();
     //diezArrayRandom();
     //sumaVectores();
-    //arrayEstadisticas();
-    arraySinDuplicados();
+    arrayEstadisticas();
+    //arraySinDuplicados();
     return 0;
 }
 
@@ -135,6 +136,7 @@ void arrayEstadisticas(void) {
     int longitud = sizeof(numeros) / sizeof(numeros[0]);
     int numeroModa = 0;
     int maxFrecuencia = moda[0];
+    int suma;
     
     for (int i = 0; i < longitud; i++)
     {
@@ -151,12 +153,31 @@ void arrayEstadisticas(void) {
             numeroModa = i;
         }
     }
+
+    for (int i = 0; i < longitud; i++)
+    {
+        suma += numeros[i];
+    }
+    int media = suma / 50;
+
+    double varianza = 0.0;
+    for (int i = 0; i < longitud; i++)
+    {
+        double diff = numeros[i] - media;
+        varianza = diff * diff;
+    }
+    
+    varianza /= longitud - 1;
+    double desviacion = sqrt(varianza);
+
     printf("Numeros generados:\n");
     for (int i = 0; i < longitud; i++) {
         printf("%d ", numeros[i]);
     }
 
-    printf("\nModa: %d (aparecio %d veces)", numeroModa, maxFrecuencia);
+    printf("\nModa: %d (aparecio %d veces)\n", numeroModa, maxFrecuencia);
+    printf("Media: %d", media);
+    printf("Desviacion estandar: %f", desviacion);
 }
 
 
