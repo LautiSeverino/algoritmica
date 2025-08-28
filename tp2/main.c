@@ -7,7 +7,8 @@ void arrayRandom(void);
 void diezArrayRandom(void);
 void sumaVectores(void);
 void arrayEstadisticas(void);
-void arraySinDuplicados(void) ;
+void arraySinDuplicados(void);
+void imprimirArray(void);
 
 
 int main() {
@@ -15,8 +16,9 @@ int main() {
     //arrayRandom();
     //diezArrayRandom();
     //sumaVectores();
-    arrayEstadisticas();
+    //arrayEstadisticas();
     //arraySinDuplicados();
+    imprimirArray();
     return 0;
 }
 
@@ -222,3 +224,24 @@ void arraySinDuplicados(void) {
     }
 
 } 
+
+//ejercicio 7
+void imprimirArray(void){
+
+    char *palabras[10] = {"hola", "chau", "perro", "casa", "gato", "azul", "rojo", "lapiz", "celular", "dado"};
+    int longitud = sizeof(palabras) / sizeof(palabras[0]); 
+    
+    printf("Al derecho: \n");
+    for (int i = 0; i < longitud; i++)
+    {
+        printf("%s ", palabras[i]);
+    }
+
+    printf("\n---------\n");
+
+    printf("Al reves: \n");
+    for (int i = longitud - 1; i >= 0; i--)
+    {
+        printf("%s ", palabras[i]);
+    }
+}
