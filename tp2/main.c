@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <math.h> 
+#include <string.h>
 
 void arrayRandom(void);
 void diezArrayRandom(void);
@@ -9,7 +10,10 @@ void sumaVectores(void);
 void arrayEstadisticas(void);
 void arraySinDuplicados(void);
 void imprimirArray(void);
-
+void fechaMayorYMenor(void);
+void palabrasEnOrdenAlfabetico(void);
+void palabrasDiferentes(void);
+void palabrasEnDiccionario(void);
 
 int main() {
 
@@ -18,7 +22,11 @@ int main() {
     //sumaVectores();
     //arrayEstadisticas();
     //arraySinDuplicados();
-    imprimirArray();
+    //imprimirArray();
+    //fechaMayorYMenor();
+    //palabrasEnOrdenAlfabetico();
+    //palabrasDiferentes();
+    palabrasEnDiccionario();
     return 0;
 }
 
@@ -244,4 +252,233 @@ void imprimirArray(void){
     {
         printf("%s ", palabras[i]);
     }
+}
+
+//ejercicio 8
+void fechaMayorYMenor(void){
+    char fechas[10][11] = {
+        "01-01-2025",
+        "04-03-2025",
+        "02-10-2025",
+        "15-06-2001",
+        "30-08-2025",
+        "20-04-2025",
+        "19-07-2025",
+        "13-10-2025",
+        "08-12-2025",
+        "06-09-1990"
+    };
+    int longitud = sizeof(fechas) / sizeof(fechas[0]);
+    
+    int dia, mes, anio;
+    int diaMayor, mesMayor, anioMayor;
+    int diaMenor, mesMenor, anioMenor;
+    
+    sscanf(fechas[0],"%2d-%2d-%4d", &diaMenor, &mesMenor, &anioMenor);
+    
+    diaMayor = diaMenor;
+    mesMayor = mesMenor;
+    anioMayor = anioMenor;
+
+    for (int i = 0; i < longitud; i++)
+    {
+        sscanf(fechas[i],"%2d-%2d-%4d", &dia, &mes, &anio);
+
+        if ((dia > diaMayor && mes >= mesMayor && anio >= anioMayor) ||
+        (mes > mesMayor && anio >= anioMayor) ||
+        (anio > anioMayor))
+        {
+            diaMayor = dia;
+            mesMayor = mes;
+            anioMayor = anio;
+        }
+
+        if ((anio < anioMenor) ||
+        (mes < mesMenor && anio <= anioMenor) ||
+        (dia < diaMenor && mes <= mesMenor && anio <= anioMenor))
+        {
+            diaMenor = dia;
+            mesMenor = mes;
+            anioMenor = anio;
+        }
+        
+    }
+    
+    printf("Fecha Menor: %2d-%2d-%4d \n", diaMenor, mesMenor, anioMenor);
+    printf("Fecha Mayor: %2d-%2d-%4d", diaMayor, mesMayor, anioMayor);
+
+}
+
+//ejercicio 9
+void palabrasEnOrdenAlfabetico(void) {
+    char continua[10];
+    char palabra[20];
+    char palabras[10][20] = {""};
+    int count = 0; // cuántas palabras tenemos ahora
+
+    do {
+        printf("Ingrese la palabra: ");
+        scanf("%s", palabra);
+
+        // Verificar si ya está lleno
+        if (count == 10) {
+            // Ver si la nueva palabra debería ir al final
+            if (strcmp(palabra, palabras[10-1]) > 0) {
+                printf("La palabra no se inserta (es la ultima alfabeticamente).\n");
+            } else {
+                // Insertar desplazando y perdiendo la última
+                int i = 10 - 2;
+                while (i >= 0 && strcmp(palabra, palabras[i]) < 0) {
+                    strcpy(palabras[i+1], palabras[i]);
+                    i--;
+                }
+                strcpy(palabras[i+1], palabra);
+            }
+        } else {
+            // Insertar normal si aún hay espacio
+            int i = count - 1;
+            while (i >= 0 && strcmp(palabra, palabras[i]) < 0) {
+                strcpy(palabras[i+1], palabras[i]);
+                i--;
+            }
+            strcpy(palabras[i+1], palabra);
+            count++;
+        }
+
+        // Mostrar estado actual del arreglo
+        for (int i = 0; i < count; i++) {
+            printf("%s ", palabras[i]);
+        }
+        printf("\n");
+
+        printf("Desea continuar? (si/fin) \n");
+        scanf("%s", continua);
+
+    } while (strcmp(continua, "fin") != 0);
+}
+
+
+//ejercicio 10
+void palabrasDiferentes(void) {
+    char palabras[20][30];
+    char palabra[30];
+    char continua[3];
+    float porcentajeIgualdad= 0;
+    float letrasIguales = 0;
+    int esValida = 1; 
+    int count = 0;
+
+
+    do
+    {   
+        printf("Ingrese la palabra: ");
+        scanf("%s", palabra);
+        for (int i = 0; i < count; i++)
+        {
+            for (int j = 0; j < strlen(palabras[i]); j++)
+            {
+                if (palabras[i][j] == palabra[j])
+                {
+                    letrasIguales ++;
+                }
+            }
+            float len = strlen(palabra);
+            if (strlen(palabras[i]) > strlen(palabra))
+            {
+                porcentajeIgualdad = letrasIguales / strlen(palabras[i]);
+            } else
+            {
+                porcentajeIgualdad += letrasIguales / len;
+            }
+            
+            porcentajeIgualdad *= 100;
+            
+            if (porcentajeIgualdad == 0.0) {
+                strcpy(palabras[count], palabra);
+                break;
+            }
+
+            if (porcentajeIgualdad >= 80.0){
+                printf("No es al menos un 20 porciento diferente: (%f) \n", porcentajeIgualdad);
+                esValida = 0;
+                break;
+            }
+            letrasIguales = 0.0;
+        }
+
+        if (esValida && count < 20) {
+        strcpy(palabras[count], palabra);
+        count++;
+    }
+    
+    
+    for (int t = 0; t < count; t++)
+    {
+        printf("%s \n", palabras[t]);
+    }
+
+            printf("\n");
+            
+            printf("Desea continuar? (si/fin) \n");
+            scanf("%s", continua);
+            
+    } while (strcmp(continua, "fin") != 0);
+    
+    
+}
+
+//ejericio 11 
+void palabrasEnDiccionario(void) {
+
+    char diccionario[1000][30];
+    char oracion[300];
+    int cantPalabras = 0;
+    char continua[4];
+
+    
+    do
+    {
+        printf("Ingrese la oracion:");
+        fgets(oracion, sizeof(oracion), stdin); // leer con espacios hasta enter
+        oracion[strcspn(oracion, "\n")] = 0; // eliminar salto de linea de enter
+
+        char *palabra = strtok(oracion, " "); //separa palabras por cada espacio
+        while (palabra != NULL)
+        {
+            int encontrada = 0;
+            for (int i = 0; i < cantPalabras; i++)
+            {
+                if (strcmp(diccionario[i], palabra) == 0) // si son iguales
+                {
+                    encontrada = 1;
+                    break;
+                }
+            }
+
+            if (!encontrada)
+            {
+                printf("La palabra (%s) no esta en el diccionario, desea agregarla (s/n) :", palabra);
+                char respuesta[3];
+                fgets(respuesta, sizeof(respuesta), stdin);
+                if (respuesta[0] == 's' && cantPalabras < 1000) // si dice que si, la agrega
+                {
+                    strcpy(diccionario[cantPalabras], palabra);
+                    cantPalabras++;
+                }
+            }
+
+            palabra = strtok(NULL, " "); // que siga con la siguiente palabra despues del espacio en donde paro hasta el proximo espacio
+        }
+        printf("\nDiccionario: \n");
+        for (int i = 0; i < cantPalabras; i++)
+        {
+            printf("%s\n", diccionario[i]);
+        }
+        
+        printf("\nDesea continuar? (si/fin): ");
+        fgets(continua, sizeof(continua), stdin);
+        continua[strcspn(continua, "\n")] = 0; // sacar enter
+
+    } while (strcmp(continua, "fin") != 0);
+
 }
