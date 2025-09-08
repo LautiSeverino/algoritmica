@@ -17,7 +17,15 @@ int main(){
 struct Producto {
     char codigo[10];
     char nombre[50];
-    int stock;
+
+    // union guarda un espacio en memoria que puede ser de un tipo de dato o de otro pero no de ambos al mismo tiempo
+    // union para stock
+    union {
+        int unidades;
+        float kilosLitros;
+    } stock;
+
+    int tipoStock; // 0 = unidades, 1 = kilos/litros
     float precio;
 };
 
@@ -84,8 +92,18 @@ void agregarProducto(){
     }
     printf("Ingrese el nombre del producto: ");
     scanf("%s", p.nombre);
-    printf("Ingrese el stock del producto: ");
-    scanf("%d", &p.stock);
+
+    printf("Ingrese el tipo de stock del producto (0 = unidades, 1 = kilos/litros): ");
+    scanf("%d", &p.tipoStock);
+
+    if(p.tipoStock == 0) {
+        printf("Ingrese el stock en unidades: ");
+        scanf("%d", &p.stock.unidades); //entero
+    } else {
+        printf("Ingrese el stock en kilos/litros: ");
+        scanf("%f", &p.stock.kilosLitros); //float
+    }
+
     printf("Ingrese el precio del producto: ");
     scanf("%f", &p.precio);
     // add prod al catalogo en la posicion libre
@@ -107,7 +125,13 @@ void verProductos(char codigo[10]){
         if(index != -1){ // si lo encontro
             printf("Codigo: %s, Nombre: %s, Stock: %d, Precio: %.2f\n", 
                 productos[index].codigo, productos[index].nombre, 
-                productos[index].stock, productos[index].precio);
+                productos[index].precio);
+
+                if(productos[index].tipoStock == 0) {
+                    printf("Stock en unidades: %d\n", productos[index].stock.unidades);
+                } else {
+                    printf("Stock en kilos/litros: %.2f\n", productos[index].stock.kilosLitros);
+                }
         } else {
             printf("Producto no encontrado.\n");
         }
@@ -117,7 +141,13 @@ void verProductos(char codigo[10]){
     for(int i = 0; i < cantidadProductos; i++){
         printf("Codigo: %s, Nombre: %s, Stock: %d, Precio: %.2f\n", 
             productos[i].codigo, productos[i].nombre, 
-            productos[i].stock, productos[i].precio);
+            productos[i].precio);
+
+            if(productos[i].tipoStock == 0) {
+                printf("Stock en unidades: %d\n", productos[i].stock.unidades);
+            } else {
+                printf("Stock en kilos/litros: %.2f\n", productos[i].stock.kilosLitros);
+            }
     }
 }
 
