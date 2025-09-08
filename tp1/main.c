@@ -23,8 +23,14 @@ void verificarCapicua(void);
 void contarDigitos(void);
 void calculadora(void);
 
+// Prototipos de funciones para la calculadora
+int suma(int a, int b);
+int resta(int a, int b);
+int multiplicacion(int a, int b);
+int division(int a, int b);
+
 int main() {
-    saludarMundo();    
+    //saludarMundo();    
     // saludar();
     //calcularEdadAproximada();
     //esMayorDeEdad();
@@ -42,7 +48,7 @@ int main() {
     //imprimirNumerosFibonacci();
     //verificarCapicua();
     //contarDigitos();
-    //calculadora();
+    calculadora();
     return 0;
 }
 
@@ -414,21 +420,16 @@ void calculadora(void){
     switch (operador)
     {
     case '+':
-        resultado = num1 + num2;
+        resultado = suma(num1, num2);
         break;
     case '-':
-        resultado = num1 - num2;
+        resultado = resta(num1, num2);
         break;
     case '*':
-        resultado = num1 * num2;
+        resultado = multiplicacion(num1, num2);
         break;
     case '/':
-        if (num2 == 0)
-        {
-            printf("No se puede divir entre cero");
-            break;
-        }
-        resultado = num1 / num2;
+        resultado = division(num1, num2);
         break;
     default:
         printf("Operando no configurado");
@@ -436,4 +437,22 @@ void calculadora(void){
     if (num2 != 0 || operador != '/'){
         printf("%d %c %d = %d", num1, operador, num2, resultado);
     }
+}
+
+
+int suma (int a, int b){
+    return a + b;
+}
+int resta (int a, int b){
+    return a - b;
+}
+int multiplicacion (int a, int b){
+    return a * b;
+}
+int division (int a, int b){
+    if (b == 0){
+        printf("No se puede dividir entre cero");
+        return 0;
+    }
+    return a / b;
 }
