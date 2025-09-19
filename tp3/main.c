@@ -1,17 +1,83 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+struct Fecha {
+ int dia;
+ int mes;
+ int anio;
+};
+struct Persona {
+ char nombre[50];
+ char apellido[50];
+ struct Fecha fechaNacimiento;
+ int edad;
+};
+
 
 // prototipo de funcs
 void agregarProducto();
 void menu();
 void verProductos(char codigo[10]);
 int verificarProducto(char codigo[10]);
+void cargarPersona(struct Persona *p);
+int calcularEdad(struct Fecha fn);
+void imprimirPersona(struct Persona p);
+
 
 int main(){
-    menu();
+    //menu();
+    struct Persona persona;
+
+    cargarPersona(&persona);
+    persona.edad = calcularEdad(persona.fechaNacimiento);
+    imprimirPersona(persona);
     return 0;
 }
+
+
+
+
+// Función para cargar datos de la persona
+void cargarPersona(struct Persona *p) {
+    printf("Ingrese nombre: ");
+    fgets(p->nombre, sizeof(p->nombre), stdin);
+    p->nombre[strcspn(p->nombre, "\n")] = 0; // quitar salto de línea
+
+    printf("Ingrese apellido: ");
+    fgets(p->apellido, sizeof(p->apellido), stdin);
+    p->apellido[strcspn(p->apellido, "\n")] = 0;
+
+    printf("Ingrese fecha de nacimiento (dd/mm/aaaa): ");
+    scanf("%d/%d/%d", &p->fechaNacimiento.dia, &p->fechaNacimiento.mes, &p->fechaNacimiento.anio);
+}
+
+// Función para calcular edad
+int calcularEdad(struct Fecha fn) {
+    time_t t = time(NULL);
+    struct tm *hoy = localtime(&t);
+
+    int edad = hoy->tm_year + 1900 - fn.anio;
+
+    // Ajustar si no cumplió años todavía este año
+    if (fn.mes > hoy->tm_mon + 1 || (fn.mes == hoy->tm_mon + 1 && fn.dia > hoy->tm_mday)) {
+        edad--;
+    }
+
+    return edad;
+}
+
+// Función para imprimir datos
+void imprimirPersona(struct Persona p) {
+    printf("La persona %s %s nació el día %02d-%02d-%04d y tiene %d años de edad.\n",
+           p.nombre, p.apellido,
+           p.fechaNacimiento.dia,
+           p.fechaNacimiento.mes,
+           p.fechaNacimiento.anio,
+           p.edad);
+}
+
+
 
 // struct del producto
 struct Producto {
@@ -28,6 +94,8 @@ struct Producto {
     int tipoStock; // 0 = unidades, 1 = kilos/litros
     float precio;
 };
+
+
 
 // alias para struct y no escribir struct todo el tiempo que declare Producto
 typedef struct Producto Producto;
