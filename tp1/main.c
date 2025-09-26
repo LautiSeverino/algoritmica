@@ -42,13 +42,13 @@ int main() {
     //calcularFactorial();
     //numerosPrimos();
     //multiplicarUsandoSuma();
-    //potenciaUsandoSuma();
+    potenciaUsandoSuma();
     //abecedarioHastaLetra();
     //abecedarioInversoHastaLetra();
     //imprimirNumerosFibonacci();
     //verificarCapicua();
     //contarDigitos();
-    calculadora();
+    //calculadora();
     return 0;
 }
 
@@ -231,7 +231,7 @@ void numerosPrimos(void){
                 break;
             }
         }
-        if (esPrimo && i != 2) {
+        if (esPrimo) {
             printf("%d ", i);
         }
     }

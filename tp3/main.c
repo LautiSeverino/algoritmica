@@ -2,40 +2,327 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+
 struct Fecha {
- int dia;
- int mes;
- int anio;
+    int dia;
+    int mes;
+    int anio;
 };
 struct Persona {
- char nombre[50];
- char apellido[50];
- struct Fecha fechaNacimiento;
- int edad;
+    char nombre[50];
+    char apellido[50];
+    struct Fecha fechaNacimiento;
+    int edad;
 };
 
 
 // prototipo de funcs
+int esPrimo(int numero);
+int calcularEdad(int diaNac, int mesNac, int anioNac); 
+void imprimir(char nombre[]);
+int producto(int factor1, int factor2);
+int potencia(int base, int exponente);
+void calculadora(void);
+int suma (int a, int b);
+int resta (int a, int b);
+int multiplicacion (int a, int b);
+int division (int a, int b);
+int verificarCapicua(int numero);
+void arrayCapicua();
+void imprimirFecha(struct Fecha f);
+void fechaActual();
+
+
+
 void agregarProducto();
 void menu();
 void verProductos(char codigo[10]);
 int verificarProducto(char codigo[10]);
 void cargarPersona(struct Persona *p);
-int calcularEdad(struct Fecha fn);
+int calcularEdadDesdeFecha(struct Fecha fn);
 void imprimirPersona(struct Persona p);
 
 
 int main(){
-    //menu();
-    struct Persona persona;
+    // int num;
+    // printf("Ingrese un numero: ");
+    // scanf("%d", &num);
+    // int numPrimo = esPrimo(num);
+    // if (numPrimo)
+    // {
+    //     printf("%d es primo", num);
+    // } else {
+    //     printf("%d no es primo", num);
+    // }
 
-    cargarPersona(&persona);
-    persona.edad = calcularEdad(persona.fechaNacimiento);
-    imprimirPersona(persona);
+    
+    // int dia, mes, anio, edad;
+    // printf("Ingrese su dia de nacimiento: ");
+    // scanf("%d", &dia);
+    
+    // printf("Ingrese su mes de nacimiento: ");
+    // scanf("%d", &mes);
+    
+    // printf("Ingrese su año de nacimiento: ");
+    // scanf("%d", &anio);
+    
+    // edad = calcularEdad(dia, mes, anio);
+    // printf("Su edad es %d", edad);
+
+
+    // char nombre[30];
+    // printf("Ingrese su nombre: ");
+    // scanf("%s", nombre);
+    // imprimir(nombre);
+
+
+    // int num1, num2, result;
+    // printf("Ingrese el primer factor: ");
+    // scanf("%d", &num1);
+    
+    // printf("Ingrese el segundo factor: ");
+    // scanf("%d", &num2);
+
+    // result = producto(num1, num2);
+    // printf("%d * %d = %d",num1, num2, result);
+
+    // int base, exponente, resultado;
+    // printf("Ingrese la base: ");
+    // scanf("%d", &base);
+
+    // printf("Ingrese la potencia: ");
+    // scanf("%d", &exponente);
+
+    // resultado = potencia(base, exponente);
+    // printf("Resultado: %d", resultado);
+
+
+    //arrayCapicua();
+
+
+    // struct Fecha f;
+    // printf("ingrese fecha (dd/mm/aaaa): \n");
+    // scanf("%d/%d/%d", &f.dia, &f.mes, &f.anio);
+
+    // imprimirFecha(f);
+
+
+    //fechaActual();
+
+
+
+    //menu();
+
+
+    // struct Persona persona;
+
+    // cargarPersona(&persona);
+
+    // imprimirPersona(persona);
+
+
     return 0;
 }
 
+//ejercicio 1
+int esPrimo(int numero){
+    int j, i, numEsPrimo;
 
+    if (numero <= 1) return 0;
+
+    numEsPrimo = 1;
+    for ( i = 2; i*i <= numero; i++)
+    {
+            if (numero % i == 0)
+            {
+                numEsPrimo = 0;
+                return numEsPrimo;
+            }
+            
+    }
+
+    return numEsPrimo;
+}
+
+//ejercicio 2
+int calcularEdad(int diaNac, int mesNac, int anioNac) {
+    int edad;
+    time_t t = time(NULL); //tiempo actual
+    struct tm *fechaActual = localtime(&t); //devuelve puntero a un struct con fecha y hora local
+    
+    //tm_yesr no da el año directamente, te da la cantida de años desde el 1900
+    // entonces aca seteamos año actual
+    //fecha es un struct con -> se accede a los miembros
+    int anioActual = fechaActual->tm_year + 1900;
+    // sin +1 muestra mes anetrior 
+    // tm_mon (0-11)
+    int mesActual = fechaActual->tm_mon + 1;
+    int diaActual = fechaActual->tm_mday;
+    
+    edad = anioActual - anioNac;
+    
+    if (mesActual < mesNac || (mesNac == mesActual && diaActual > diaNac)){
+        edad--;
+    }
+    return edad;
+}
+
+//ejercicio 3
+void imprimir(char nombre[]) {
+    printf("Hola %s!", nombre);
+}
+
+
+//ejercicio 4
+int producto(int factor1, int factor2) {
+    int result;
+    result = 0;
+        for (int i = 0; i < factor1; i++)
+    {
+        result += factor2;
+    }
+
+    return result;
+}
+// ejercicio 4
+int potencia(int base, int exponente){
+    int resultado, acumulador;
+    
+    resultado = 1;
+    
+    for (int i = 1; i <= exponente; i++){
+        acumulador = 0;
+        for (int j = 0; j < base; j++)
+        {
+            acumulador += resultado; 
+        }
+        resultado = acumulador;
+    }
+    return resultado;
+}
+
+//ejercicio 5
+void calculadora(void){
+    int num1, num2, resultado;
+    char operador;
+    printf("Ingrese el primer numero: \n");
+    scanf("%d", &num1);
+
+    
+    printf("Ingrese el operador: \n");
+    //con espacio para limpiar buffer
+    scanf(" %c", &operador);
+
+    printf("Ingrese el segundo numero: \n");
+    scanf("%d", &num2);
+
+    switch (operador)
+    {
+    case '+':
+        resultado = suma(num1, num2);
+        break;
+    case '-':
+        resultado = resta(num1, num2);
+        break;
+    case '*':
+        resultado = multiplicacion(num1, num2);
+        break;
+    case '/':
+        resultado = division(num1, num2);
+        break;
+    default:
+        printf("Operando no configurado");
+    }
+    if (num2 != 0 || operador != '/'){
+        printf("%d %c %d = %d", num1, operador, num2, resultado);
+    }
+}
+
+
+int suma (int a, int b){
+    return a + b;
+}
+int resta (int a, int b){
+    return a - b;
+}
+int multiplicacion (int a, int b){
+    return a * b;
+}
+int division (int a, int b){
+    if (b == 0){
+        printf("No se puede dividir entre cero");
+        return 0;
+    }
+    return a / b;
+}
+
+
+//ejercicio 6
+void arrayCapicua(){
+
+    srand(time(NULL));
+
+    int numeros[10];
+    int contador = 0;
+    int intentos = 0;
+        while (contador < 10)
+        {
+            intentos +=1;
+            int numRandom = rand() % 100000;
+            if(verificarCapicua(numRandom)){
+                numeros[contador] = numRandom;
+                contador++;
+            }
+        }
+    
+    printf("numeros generados (intentos): %d\n", intentos);
+    printf("Numeros Capicua:\n");
+    for (int i = 0; i < 10; i++)
+    {
+        printf("%d ", numeros[i]);
+    }
+}
+
+int verificarCapicua(int numero){
+    int ultimoDigito, numeroInvertido, numeroOriginal;
+    numeroOriginal = numero;
+    numeroInvertido = 0;
+    
+    //algoritmo inversion
+    while (numero != 0)
+    {
+        //obtener ultimo digito
+        ultimoDigito = numero % 10;
+        //construir numero invertido
+        numeroInvertido = numeroInvertido * 10 + ultimoDigito;
+        //eliminar ultimo digito
+        numero /= 10;
+    }
+    
+    if (numeroOriginal != numeroInvertido) {
+        return 0;
+    }
+    return 1;
+}
+
+//ejercicio 8
+void imprimirFecha(struct Fecha f){
+    printf("Fecha: %d/%d/%d", f.dia, f.mes, f.anio);
+}
+
+void fechaActual(){
+        // 1. Obtener el tiempo actual en segundos desde Epoch
+    time_t t = time(NULL);
+
+    // 2. Convertirlo a fecha/hora local
+    struct tm *fecha = localtime(&t);
+
+    // 3. Imprimir con formato dd/mm/yyyy
+    printf("Hoy es %02d/%02d/%04d\n",
+            fecha->tm_mday,
+            fecha->tm_mon + 1,       // tm_mon va de 0 a 11 → sumamos 1
+            fecha->tm_year + 1900);  // tm_year es años desde 1900
+}
 
 
 // Función para cargar datos de la persona
@@ -50,10 +337,12 @@ void cargarPersona(struct Persona *p) {
 
     printf("Ingrese fecha de nacimiento (dd/mm/aaaa): ");
     scanf("%d/%d/%d", &p->fechaNacimiento.dia, &p->fechaNacimiento.mes, &p->fechaNacimiento.anio);
+
+    p->edad = calcularEdadDesdeFecha(p->fechaNacimiento);
 }
 
 // Función para calcular edad
-int calcularEdad(struct Fecha fn) {
+int calcularEdadDesdeFecha(struct Fecha fn) {
     time_t t = time(NULL);
     struct tm *hoy = localtime(&t);
 
@@ -70,11 +359,11 @@ int calcularEdad(struct Fecha fn) {
 // Función para imprimir datos
 void imprimirPersona(struct Persona p) {
     printf("La persona %s %s nació el día %02d-%02d-%04d y tiene %d años de edad.\n",
-           p.nombre, p.apellido,
-           p.fechaNacimiento.dia,
-           p.fechaNacimiento.mes,
-           p.fechaNacimiento.anio,
-           p.edad);
+            p.nombre, p.apellido,
+            p.fechaNacimiento.dia,
+            p.fechaNacimiento.mes,
+            p.fechaNacimiento.anio,
+            p.edad);
 }
 
 
@@ -191,7 +480,7 @@ void verProductos(char codigo[10]){
     if(codigo != NULL) {
         int index = verificarProducto(codigo);
         if(index != -1){ // si lo encontro
-            printf("Codigo: %s, Nombre: %s, Stock: %d, Precio: %.2f\n", 
+            printf("Codigo: %s, Nombre: %s, Precio: %.2f\n", 
                 productos[index].codigo, productos[index].nombre, 
                 productos[index].precio);
 
@@ -207,7 +496,7 @@ void verProductos(char codigo[10]){
     }
     // si no hay filter
     for(int i = 0; i < cantidadProductos; i++){
-        printf("Codigo: %s, Nombre: %s, Stock: %d, Precio: %.2f\n", 
+        printf("Codigo: %s, Nombre: %s, Precio: %.2f\n", 
             productos[i].codigo, productos[i].nombre, 
             productos[i].precio);
 
