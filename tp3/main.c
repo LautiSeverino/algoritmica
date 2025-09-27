@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <math.h>
 
 struct Fecha {
     int dia;
@@ -14,6 +15,25 @@ struct Persona {
     struct Fecha fechaNacimiento;
     int edad;
 };
+
+// struct del producto
+struct Producto {
+    char codigo[10];
+    char nombre[50];
+
+    // union guarda un espacio en memoria que puede ser de un tipo de dato o de otro pero no de ambos al mismo tiempo
+    // union para stock
+    union {
+        int unidades;
+        float kilosLitros;
+    } stock;
+
+    int tipoStock; // 0 = unidades, 1 = kilos/litros
+    float precio;
+};
+
+// alias para struct y no escribir struct todo el tiempo que declare Producto
+typedef struct Producto Producto;
 
 
 // prototipo de funcs
@@ -32,7 +52,12 @@ void arrayCapicua();
 void imprimirFecha(struct Fecha f);
 void fechaActual();
 
-
+void menuGeo();
+void ingresarPuntoGeo();
+void calcularDistancia();
+double haversine(double lat1, double lon1, double lat2, double lon2);
+int buscarGeoPoint(char nombre[30]);
+void getGeoPoints();
 
 void agregarProducto();
 void menu();
@@ -119,6 +144,8 @@ int main(){
     // cargarPersona(&persona);
 
     // imprimirPersona(persona);
+
+    menuGeo();
 
 
     return 0;
@@ -310,6 +337,7 @@ void imprimirFecha(struct Fecha f){
     printf("Fecha: %d/%d/%d", f.dia, f.mes, f.anio);
 }
 
+//ejercicio 9
 void fechaActual(){
         // 1. Obtener el tiempo actual en segundos desde Epoch
     time_t t = time(NULL);
@@ -325,6 +353,8 @@ void fechaActual(){
 }
 
 
+
+// ejercicio 10
 // Función para cargar datos de la persona
 void cargarPersona(struct Persona *p) {
     printf("Ingrese nombre: ");
@@ -366,28 +396,7 @@ void imprimirPersona(struct Persona p) {
             p.edad);
 }
 
-
-
-// struct del producto
-struct Producto {
-    char codigo[10];
-    char nombre[50];
-
-    // union guarda un espacio en memoria que puede ser de un tipo de dato o de otro pero no de ambos al mismo tiempo
-    // union para stock
-    union {
-        int unidades;
-        float kilosLitros;
-    } stock;
-
-    int tipoStock; // 0 = unidades, 1 = kilos/litros
-    float precio;
-};
-
-
-
-// alias para struct y no escribir struct todo el tiempo que declare Producto
-typedef struct Producto Producto;
+//ejercico 11 y 12
 
 //catalogo de productos
 Producto productos[100];
@@ -516,4 +525,150 @@ int verificarProducto(char codigo[10]){
         }
     }
     return -1; // devuelve -1 si no lo encuentra
+}
+
+
+//ejercicio 13
+#define PI 3.14159265358979323846
+
+struct GeoPoint {
+    char nombre[30];
+    float latitud;
+    float longitud;
+};
+
+typedef struct GeoPoint GeoPoint;
+
+GeoPoint GeoPoints[100];
+int cantidadGeoPoints = 0;
+
+void menuGeo(){
+    int opcion;
+    do
+    {
+        printf("\n--- Menu de Geo Points ---\n");
+        printf("1. Agregar Geo Point\n");
+        printf("2. Calcular Distancia entre 2 geo points\n");
+        printf("3. Ver geo Points\n");
+        printf("4. Salir\n");
+        printf("Seleccione una opcion: ");
+        scanf("%d", &opcion);
+
+        switch (opcion)
+        {
+        case 1:
+            ingresarPuntoGeo();
+            break;
+        case 2:
+            calcularDistancia();
+            break;
+        case 3:
+            getGeoPoints();
+            break;
+        default:
+            printf("Opcion Invalida");
+        }
+
+    } while (opcion != 4);
+    
+}
+
+
+void ingresarPuntoGeo(){
+    GeoPoint lugar;
+    printf("Ingrese Nombre: ");
+    scanf("%s", lugar.nombre);
+
+    printf("Ingrese Latitud: ");
+    scanf("%f", &lugar.latitud);
+
+    printf("Ingrese Longitud: ");
+    scanf("%f", &lugar.longitud);
+
+    GeoPoints[cantidadGeoPoints] = lugar;
+    cantidadGeoPoints++;
+}
+
+void calcularDistancia(){
+    char nombreA[30], nombreB[30];
+    int index = 0;
+    GeoPoint puntoA;
+    GeoPoint puntoB;
+    
+    do
+    {
+        
+        printf("Ingrese el nombre del punto A: ");
+        scanf("%s", nombreA);
+        
+        index = buscarGeoPoint(nombreA);
+    } while (index == -1);
+    puntoA = GeoPoints[index];
+
+    do
+    {
+        
+        printf("Ingrese el nombre del punto B: ");
+        scanf("%s", nombreB);
+        
+        index = buscarGeoPoint(nombreB);
+    } while (index == -1);
+    puntoB = GeoPoints[index];
+
+    double distancia = 0.0;
+
+    distancia = haversine(puntoA.latitud, puntoA.longitud, puntoB.latitud, puntoB.longitud);
+
+    printf("La distacia entre el %s y %s es de %f km", puntoA.nombre, puntoB.nombre, distancia);
+
+
+
+
+}
+
+
+
+double haversine(double lat1_deg, double lon1_deg, double lat2_deg, double lon2_deg) {
+    double lat1 = lat1_deg * PI / 180.0;
+    double lon1 = lon1_deg * PI / 180.0;
+    double lat2 = lat2_deg * PI / 180.0;
+    double lon2 = lon2_deg * PI / 180.0;
+
+    
+    double dlat = lat2 - lat1;
+    double dlon = lon2 - lon1;
+    double a = pow(sin(dlat/2), 2) + cos(lat1) * cos(lat2) * pow(sin(dlon/2), 2);
+    double c = 2 * atan2(sqrt(a), sqrt(1-a));
+    double distancia = 6371 * c; // Radio de la Tierra en km
+    return distancia;
+}
+
+
+int buscarGeoPoint(char nombre[30]){
+    for (int i = 0; i < cantidadGeoPoints; i++)
+    {
+        if (strcmp(GeoPoints[i].nombre, nombre) == 0)
+        {
+            return i;
+        }
+    }
+    return -1;    
+}
+
+void getGeoPoints(){
+    if (cantidadGeoPoints == 0)
+    {
+        printf("No hay registros de geo points\n");
+        return;
+    }
+    
+    for (int i = 0; i < cantidadGeoPoints; i++)
+    {
+        printf("###################################\n");
+        printf("Nombre %s\n", GeoPoints[i].nombre);
+        printf("Latitud %f\n", GeoPoints[i].latitud);
+        printf("Longitud %f\n", GeoPoints[i].longitud);
+        printf("###################################\n");
+    }
+    
 }
