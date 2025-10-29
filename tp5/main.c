@@ -31,9 +31,30 @@ int main(int argc, char *argv[]) {
     //leerArchivoCmd(argc, argv); // ./main ejemplo.txt
     //pidfile();
     //leerArchivoDat();
-    importarDatos();
+    //importarDatos();
     return 0;
 }
+
+// void leerCodigoFuente(){
+//     FILE *f = fopen(__FILE__, "r");
+//     if (!f)
+//     {
+//         perror("fopen");
+//     }
+//     int c;
+//     while ((c = fgetc(f)) != EOF)
+//     {
+//         putchar(c);
+//     }
+//     fclose(f);
+// }
+
+// void leerArchivoCmd(int argc, char *argv[]){
+//     if (argc < 2)
+//     {
+//     }
+    
+// }
 
 //ejercicio 1
 void leerCodigoFuente(){
@@ -54,7 +75,7 @@ void leerCodigoFuente(){
 void leerArchivoCmd(int argc, char *argv[]){
     if (argc < 2)
     {
-        fprintf(stderr, "Uso: %s archivo_a_leer\n", argv[0]);
+        fprintf(stderr, "Uso: %s ejemplo.txt\n", argv[0]);
         return;
     }
     FILE *f = fopen(argv[1], "r");
@@ -147,7 +168,7 @@ void leerArchivoDat(){
     strftime(fecha, sizeof(fecha), "%d/%m/%Y %H:%M:%S", tm_info);
 
     fprintf(f, "%s\n", fecha);
-    fclose(f);
+fclose(f);
 
 }
 
